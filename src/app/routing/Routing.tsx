@@ -1,9 +1,9 @@
 import { Route, Routes } from 'react-router'
 
 import { PrivateRoute } from './PrivateRoute'
-import { Main } from '../../pages/main'
-import { AuthPage, RegistrationPage } from '../../pages/auth/ui'
-import { routePaths } from '../../shared/config/routePaths'
+import { Main } from '@pages/main'
+import { AuthPage, RegistrationPage } from '@pages/auth/ui'
+import { routePaths } from '@shared/config/routePaths'
 
 export const Routing = () => {
   return (

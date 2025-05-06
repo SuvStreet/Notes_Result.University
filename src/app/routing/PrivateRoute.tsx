@@ -1,7 +1,7 @@
 import type { JSX } from 'react'
 import { Navigate } from 'react-router'
 
-import { routePaths } from '../../shared/config/routePaths'
+import { routePaths } from '@shared/config/routePaths'
 
 interface PrivateRouteProps {
   children: JSX.Element
