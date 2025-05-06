@@ -1,7 +1,10 @@
+import { RegistrationForm } from '@features/auth'
+
 export const RegistrationPage = () => {
   return (
     <div>
-      <h1>RegistrationPage</h1>
+      <h1>Регистрация</h1>
+      <RegistrationForm />
     </div>
   )
 }
