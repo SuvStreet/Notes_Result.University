@@ -1,16 +1,15 @@
-import { MantineStyleProvider } from './provider'
-import { Router } from './router'
+import { MantineStyleProvider, RouterProvider } from './provider'
 
-import { Routing } from '../pages/Routing'
+import { Routing } from './routing/Routing'
 
 import './App.css'
 
 function App() {
   return (
     <MantineStyleProvider>
-      <Router>
+      <RouterProvider>
         <Routing />
-      </Router>
+      </RouterProvider>
     </MantineStyleProvider>
   )
 }

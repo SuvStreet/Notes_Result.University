@@ -1,10 +1,10 @@
-import type { ReactNode } from 'react'
+import type { JSX } from 'react'
 import { BrowserRouter } from 'react-router'
 
 interface RouterProps {
-  children: ReactNode
+  children: JSX.Element
 }
 
-export const Router = ({ children }: RouterProps) => {
+export const RouterProvider = ({ children }: RouterProps) => {
   return <BrowserRouter>{children}</BrowserRouter>
 }
