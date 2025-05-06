@@ -1,14 +1,17 @@
+import type { JSX } from 'react'
 import { Navigate } from 'react-router'
 
+import { routePaths } from '../../shared/config/routePaths'
+
 interface PrivateRouteProps {
-  children: React.ReactNode
+  children: JSX.Element
 }
 
 export const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const isAuthenticated = false
 
   if (!isAuthenticated) {
-    return <Navigate to="/signin" replace />
+    return <Navigate to={routePaths.auth} replace />
   }
 
   return children
