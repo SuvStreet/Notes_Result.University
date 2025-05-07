@@ -1,17 +1,27 @@
-import { Link } from 'react-router'
+import { useDisclosure } from '@mantine/hooks'
+import { Link, useNavigate } from 'react-router'
 import {
   Anchor,
   Button,
   Flex,
   Group,
+  Modal,
   PasswordInput,
+  Text,
   TextInput,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 
 import { routePaths } from '@shared/config/routePaths'
+import { useAuth } from '../model/useAuth'
+import { useState } from 'react'
 
 export const RegistrationForm = () => {
+  const { signUp, loading } = useAuth()
+  const [modalError, setModalError] = useState<string | null>(null)
+  const [opened, { open, close }] = useDisclosure(false)
+  const navigate = useNavigate()
+
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: {
@@ -26,53 +36,71 @@ export const RegistrationForm = () => {
       password: (value) => {
         if (!value) return 'Пароль не может быть пустым'
         if (!/^\d+$/.test(value)) return 'Пароль должен быть из цифр'
-        if (value.length > 5)
-          return 'Пароль слишком длинный (максимум 5 символов)'
-        if (value.length < 3)
-          return 'Пароль слишком короткий (минимум 3 символа)'
+        if (value.length > 8)
+          return 'Пароль слишком длинный (максимум 8 символов)'
+        if (value.length < 6)
+          return 'Пароль слишком короткий (минимум 6 символов)'
       },
       confirmPassword: (value, values) =>
         value !== values.password ? 'Пароли не совпадают' : null,
     },
   })
 
-  const handleSubmit = (values: typeof form.values) => {
-    console.log(values)
-    form.reset()
+  const handleSubmit = async (values: typeof form.values) => {
+    const { user, error } = await signUp(values.email, values.password)
+    
+    if (user && !error) {
+      navigate(routePaths.main, { replace: true })
+    }
+
+    if (error) {
+      setModalError(error)
+      open()
+    }
   }
 
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)}>
-      <Flex direction="column" gap="md">
-        <TextInput
-          autoComplete="email"
-          label="Логин"
-          placeholder="Введите логин"
-          withAsterisk
-          key={form.key('email')}
-          {...form.getInputProps('email')}
-        />
-        <PasswordInput
-          label="Пароль"
-          placeholder="Введите пароль"
-          withAsterisk
-          key={form.key('password')}
-          {...form.getInputProps('password')}
-        />
-        <PasswordInput
-          label="Повторите пароль"
-          placeholder="Повторите пароль"
-          withAsterisk
-          key={form.key('confirmPassword')}
-          {...form.getInputProps('confirmPassword')}
-        />
-      </Flex>
-      <Group justify="space-between" mt="md" align="end">
-        <Anchor component={Link} to={routePaths.auth} size="sm" c="grey">
-          Авторизоваться
-        </Anchor>
-        <Button type="submit">Зарегистрироваться</Button>
-      </Group>
-    </form>
+    <>
+      <form onSubmit={form.onSubmit(handleSubmit)}>
+        <Flex direction="column" gap="md" miw={320}>
+          <TextInput
+            autoComplete="email"
+            label="Логин"
+            placeholder="Введите логин"
+            withAsterisk
+            key={form.key('email')}
+            {...form.getInputProps('email')}
+          />
+          <PasswordInput
+            label="Пароль"
+            placeholder="Введите пароль"
+            withAsterisk
+            key={form.key('password')}
+            {...form.getInputProps('password')}
+          />
+          <PasswordInput
+            label="Повторите пароль"
+            placeholder="Повторите пароль"
+            withAsterisk
+            key={form.key('confirmPassword')}
+            {...form.getInputProps('confirmPassword')}
+          />
+        </Flex>
+        <Group justify="space-between" mt="md" align="end">
+          <Anchor component={Link} to={routePaths.auth} size="sm" c="grey">
+            Авторизоваться
+          </Anchor>
+          <Button type="submit" loading={loading} disabled={loading}>
+            {loading ? 'Загрузка...' : 'Зарегистрироваться'}
+          </Button>
+        </Group>
+      </form>
+
+      <Modal opened={opened} onClose={close} title="Ошибка" centered>
+        <Text size="sm" c="red">
+          {modalError}
+        </Text>
+      </Modal>
+    </>
   )
 }
