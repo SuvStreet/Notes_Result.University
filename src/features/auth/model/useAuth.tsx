@@ -81,11 +81,25 @@ export const useAuth = () => {
     }
   }
 
+  const signOut = async () => {
+    setAuthActionLoading(true)
+
+    try {
+      await auth.signOut()
+      setUser(null)
+    } catch (error) {
+      console.error('Ошибка при выходе:', error)
+    } finally {
+      setAuthActionLoading(false)
+    }
+  }
+
   return {
     signUp,
     signIn,
     loading: authActionLoading,
     initializing: authInitializing,
     user,
+    signOut,
   }
 }

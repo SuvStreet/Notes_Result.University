@@ -14,7 +14,8 @@ interface AuthContextProps {
   loading: boolean
   initializing: boolean
   signIn: AuthFn
-  signUp: AuthFn
+  signUp: AuthFn,
+  signOut: () => Promise<void>
 }
 
 interface ChildrenProps {
@@ -27,6 +28,7 @@ const defaultAuthContext: AuthContextProps = {
   initializing: true,
   signIn: async () => ({ user: null, error: null }),
   signUp: async () => ({ user: null, error: null }),
+  signOut: async () => {},
 }
 
 const AuthContext = createContext<AuthContextProps>(defaultAuthContext)
@@ -36,10 +38,10 @@ export function useAuthContext() {
 }
 
 export function AuthProvider({ children }: ChildrenProps) {
-  const { user, loading, initializing, signIn, signUp } = useAuth()
+  const { user, loading, initializing, signIn, signUp, signOut } = useAuth()
 
   return (
-    <AuthContext value={{ user, loading, initializing, signIn, signUp }}>
+    <AuthContext value={{ user, loading, initializing, signIn, signUp, signOut }}>
       {children}
     </AuthContext>
   )
