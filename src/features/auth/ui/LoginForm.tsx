@@ -41,6 +41,7 @@ export const LoginForm = () => {
     <form onSubmit={form.onSubmit(handleSubmit)}>
       <Flex direction="column" gap="md">
         <TextInput
+          autoComplete="email"
           label="Логин"
           placeholder="Введите логин"
           withAsterisk
