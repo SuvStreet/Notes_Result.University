@@ -8,9 +8,9 @@ export const PublicRoute = ({ children }: { children: JSX.Element }) => {
   const context = useAuthContext()
 
   if (context) {
-    const { user, loading } = context
+    const { user, initializing } = context
 
-    if (loading)
+    if (initializing)
       return (
         <>
           <Flex justify="center" align="center" style={{ height: '100vh' }}>

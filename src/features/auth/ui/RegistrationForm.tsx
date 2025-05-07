@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useDisclosure } from '@mantine/hooks'
 import { Link, useNavigate } from 'react-router'
 import {
@@ -13,11 +14,10 @@ import {
 import { useForm } from '@mantine/form'
 
 import { routePaths } from '@shared/config/routePaths'
-import { useAuth } from '../model/useAuth'
-import { useState } from 'react'
+import { useAuthContext } from '@app/provider'
 
 export const RegistrationForm = () => {
-  const { signUp, loading } = useAuth()
+  const { signUp, loading } = useAuthContext()
   const [modalError, setModalError] = useState<string | null>(null)
   const [opened, { open, close }] = useDisclosure(false)
   const navigate = useNavigate()
@@ -47,13 +47,11 @@ export const RegistrationForm = () => {
   })
 
   const handleSubmit = async (values: typeof form.values) => {
-    const { error } = await signUp(values.email, values.password,
-      () => {
-        navigate(routePaths.main, { replace: true })
-      }
-    )
+    const { error } = await signUp(values.email, values.password)
 
-    if (error) {
+    if (!error) {
+      navigate(routePaths.main, { replace: true })
+    } else {
       setModalError(error)
       open()
     }

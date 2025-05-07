@@ -14,10 +14,10 @@ import {
 } from '@mantine/core'
 
 import { routePaths } from '@shared/config/routePaths'
-import { useAuth } from '../model/useAuth'
+import { useAuthContext } from '@app/provider'
 
 export const LoginForm = () => {
-  const { loading, signIn } = useAuth()
+  const { loading, signIn } = useAuthContext()
   const [modalError, setModalError] = useState<string | null>(null)
   const [opened, { open, close }] = useDisclosure(false)
   const navigate = useNavigate()
@@ -43,13 +43,11 @@ export const LoginForm = () => {
   })
 
   const handleSubmit = async (values: typeof form.values) => {
-    const { error } = await signIn(values.email, values.password,
-      () => {
-        navigate(routePaths.main, { replace: true })
-      }
-    )
+    const { error } = await signIn(values.email, values.password)
 
-    if (error) {
+    if (!error) {
+      navigate(routePaths.main, { replace: true })
+    } else {
       setModalError(error)
       open()
     }
