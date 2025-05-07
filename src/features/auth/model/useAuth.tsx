@@ -13,7 +13,8 @@ export interface User {
 
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
+  const [authInitializing, setAuthInitializing] = useState(true)
+  const [authActionLoading, setAuthActionLoading] = useState(false)
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
@@ -22,18 +23,14 @@ export const useAuth = () => {
       } else {
         setUser(null)
       }
-      setLoading(false)
+      setAuthInitializing(false)
     })
 
     return () => unsubscribe()
   }, [])
 
-  const signUp = async (
-    email: string,
-    password: string,
-    callback: () => void
-  ) => {
-    setLoading(true)
+  const signUp = async (email: string, password: string) => {
+    setAuthActionLoading(true)
 
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -45,8 +42,6 @@ export const useAuth = () => {
 
       setUser({ id: user.uid, email: user.email || '' })
 
-      callback()
-
       return { user: { id: user.uid, email: user.email || '' }, error: null }
     } catch (error) {
       console.error('Ошибка при регистрации:', error)
@@ -56,16 +51,12 @@ export const useAuth = () => {
         error: 'Регистрация не удалась. Попробуйте еще раз.',
       }
     } finally {
-      setLoading(false)
+      setAuthActionLoading(false)
     }
   }
 
-  const signIn = async (
-    email: string,
-    password: string,
-    callback: () => void
-  ) => {
-    setLoading(true)
+  const signIn = async (email: string, password: string) => {
+    setAuthActionLoading(true)
 
     try {
       const userCredential = await signInWithEmailAndPassword(
@@ -77,8 +68,6 @@ export const useAuth = () => {
 
       setUser({ id: user.uid, email: user.email || '' })
 
-      callback()
-
       return { user: { id: user.uid, email: user.email || '' }, error: null }
     } catch (err) {
       console.error('Ошибка при входе:', err)
@@ -88,14 +77,15 @@ export const useAuth = () => {
         error: 'Вход не удался. Попробуйте еще раз.',
       }
     } finally {
-      setLoading(false)
+      setAuthActionLoading(false)
     }
   }
 
   return {
     signUp,
     signIn,
-    loading,
+    loading: authActionLoading,
+    initializing: authInitializing,
     user,
   }
 }

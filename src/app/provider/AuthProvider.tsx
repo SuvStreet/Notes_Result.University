@@ -7,15 +7,12 @@ interface AuthResult {
   error: string | null
 }
 
-type AuthFn = (
-  email: string,
-  password: string,
-  callback: () => void
-) => Promise<AuthResult>
+type AuthFn = (email: string, password: string) => Promise<AuthResult>
 
 interface AuthContextProps {
   user: User | null
   loading: boolean
+  initializing: boolean
   signIn: AuthFn
   signUp: AuthFn
 }
@@ -24,17 +21,25 @@ interface ChildrenProps {
   children: JSX.Element
 }
 
-const AuthContext = createContext<AuthContextProps | null>(null)
+const defaultAuthContext: AuthContextProps = {
+  user: null,
+  loading: true,
+  initializing: true,
+  signIn: async () => ({ user: null, error: null }),
+  signUp: async () => ({ user: null, error: null }),
+}
+
+const AuthContext = createContext<AuthContextProps>(defaultAuthContext)
 
 export function useAuthContext() {
   return useContext(AuthContext)
 }
 
 export function AuthProvider({ children }: ChildrenProps) {
-  const { user, loading, signIn, signUp } = useAuth()
+  const { user, loading, initializing, signIn, signUp } = useAuth()
 
   return (
-    <AuthContext value={{ user, loading, signIn, signUp }}>
+    <AuthContext value={{ user, loading, initializing, signIn, signUp }}>
       {children}
     </AuthContext>
   )
