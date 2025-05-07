@@ -1,12 +1,9 @@
-import { createContext, useContext, type JSX } from 'react'
-import {
-  useAuth,
-  type AuthContextProps,
-  defaultAuthContext,
-} from '@features/auth/model/useAuth'
+import { createContext, useContext, type ReactNode } from 'react'
+import { useAuth, defaultAuthContext } from '@features/auth/model/useAuth'
+import type { AuthContextProps } from '@features/auth/model/type'
 
 interface ChildrenProps {
-  children: JSX.Element
+  children: ReactNode
 }
 
 const AuthContext = createContext<AuthContextProps>(defaultAuthContext)
@@ -18,5 +15,5 @@ export function useAuthContext() {
 export function AuthProvider({ children }: ChildrenProps) {
   const auth = useAuth()
 
-  return <AuthContext.Provider value={auth}>{children}</AuthContext.Provider>
+  return <AuthContext value={auth}>{children}</AuthContext>
 }
