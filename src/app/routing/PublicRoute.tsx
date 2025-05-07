@@ -1,15 +1,10 @@
-import { type JSX } from 'react'
+import type { JSX } from 'react'
 import { Navigate } from 'react-router'
-
+import { useAuthContext } from '@app/provider/AuthProvider'
 import { routePaths } from '@shared/config/routePaths'
-import { useAuthContext } from '@app/provider'
 import { Flex, Loader } from '@mantine/core'
 
-interface PrivateRouteProps {
-  children: JSX.Element
-}
-
-export const PrivateRoute = ({ children }: PrivateRouteProps) => {
+export const PublicRoute = ({ children }: { children: JSX.Element }) => {
   const context = useAuthContext()
 
   if (context) {
@@ -24,7 +19,7 @@ export const PrivateRoute = ({ children }: PrivateRouteProps) => {
         </>
       )
 
-    return user ? children : <Navigate to={routePaths.auth} replace />
+    return user ? <Navigate to={routePaths.main} replace /> : children
   }
 
   return null
