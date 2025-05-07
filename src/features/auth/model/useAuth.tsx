@@ -16,7 +16,6 @@ export const useAuth = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    setLoading(true)
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser) {
         setUser({ id: firebaseUser.uid, email: firebaseUser.email || '' })
@@ -29,7 +28,11 @@ export const useAuth = () => {
     return () => unsubscribe()
   }, [])
 
-  const signUp = async (email: string, password: string) => {
+  const signUp = async (
+    email: string,
+    password: string,
+    callback: () => void
+  ) => {
     setLoading(true)
 
     try {
@@ -41,6 +44,8 @@ export const useAuth = () => {
       const user = userCredential.user
 
       setUser({ id: user.uid, email: user.email || '' })
+
+      callback()
 
       return { user: { id: user.uid, email: user.email || '' }, error: null }
     } catch (error) {
@@ -55,7 +60,11 @@ export const useAuth = () => {
     }
   }
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (
+    email: string,
+    password: string,
+    callback: () => void
+  ) => {
     setLoading(true)
 
     try {
@@ -67,6 +76,8 @@ export const useAuth = () => {
       const user = userCredential.user
 
       setUser({ id: user.uid, email: user.email || '' })
+
+      callback()
 
       return { user: { id: user.uid, email: user.email || '' }, error: null }
     } catch (err) {

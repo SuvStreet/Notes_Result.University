@@ -7,7 +7,11 @@ interface AuthResult {
   error: string | null
 }
 
-type AuthFn = (email: string, password: string) => Promise<AuthResult>
+type AuthFn = (
+  email: string,
+  password: string,
+  callback: () => void
+) => Promise<AuthResult>
 
 interface AuthContextProps {
   user: User | null
