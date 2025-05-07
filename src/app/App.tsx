@@ -1,4 +1,4 @@
-import { MantineStyleProvider, RouterProvider } from './provider'
+import { MantineStyleProvider, RouterProvider, AuthProvider } from './provider'
 
 import { Routing } from './routing/Routing'
 
@@ -8,7 +8,9 @@ function App() {
   return (
     <MantineStyleProvider>
       <RouterProvider>
-        <Routing />
+        <AuthProvider>
+          <Routing />
+        </AuthProvider>
       </RouterProvider>
     </MantineStyleProvider>
   )

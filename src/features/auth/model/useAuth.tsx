@@ -1,18 +1,33 @@
 import { auth } from '@shared/api/firebase'
 import {
   createUserWithEmailAndPassword,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
 } from 'firebase/auth'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-interface User {
+export interface User {
   id: string
   email: string
 }
 
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    setLoading(true)
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser) {
+        setUser({ id: firebaseUser.uid, email: firebaseUser.email || '' })
+      } else {
+        setUser(null)
+      }
+      setLoading(false)
+    })
+
+    return () => unsubscribe()
+  }, [])
 
   const signUp = async (email: string, password: string) => {
     setLoading(true)
@@ -25,7 +40,9 @@ export const useAuth = () => {
       )
       const user = userCredential.user
 
-      return { user, error: null }
+      setUser({ id: user.uid, email: user.email || '' })
+
+      return { user: { id: user.uid, email: user.email || '' }, error: null }
     } catch (error) {
       console.error('Ошибка при регистрации:', error)
 
@@ -49,7 +66,9 @@ export const useAuth = () => {
       )
       const user = userCredential.user
 
-      return { user, error: null }
+      setUser({ id: user.uid, email: user.email || '' })
+
+      return { user: { id: user.uid, email: user.email || '' }, error: null }
     } catch (err) {
       console.error('Ошибка при входе:', err)
 
@@ -66,5 +85,6 @@ export const useAuth = () => {
     signUp,
     signIn,
     loading,
+    user,
   }
 }
