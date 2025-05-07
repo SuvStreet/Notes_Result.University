@@ -1,17 +1,42 @@
+import { useEffect, useState } from 'react'
 import { auth } from '@shared/api/firebase'
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
 } from 'firebase/auth'
-import { useEffect, useState } from 'react'
 
 export interface User {
   id: string
   email: string
 }
 
-export const useAuth = () => {
+export interface AuthResult {
+  user: User | null
+  error: string | null
+}
+
+export type AuthFn = (email: string, password: string) => Promise<AuthResult>
+
+export interface AuthContextProps {
+  user: User | null
+  loading: boolean
+  initializing: boolean
+  signUp: AuthFn
+  signIn: AuthFn
+  signOut: () => Promise<void>
+}
+
+export const defaultAuthContext: AuthContextProps = {
+  user: null,
+  loading: true,
+  initializing: true,
+  signUp: async () => ({ user: null, error: null }),
+  signIn: async () => ({ user: null, error: null }),
+  signOut: async () => {},
+}
+
+export const useAuth = (): AuthContextProps => {
   const [user, setUser] = useState<User | null>(null)
   const [authInitializing, setAuthInitializing] = useState(true)
   const [authActionLoading, setAuthActionLoading] = useState(false)
