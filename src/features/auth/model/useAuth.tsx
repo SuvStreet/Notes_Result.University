@@ -1,5 +1,8 @@
 import { auth } from '@shared/api/firebase'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from 'firebase/auth'
 import { useState } from 'react'
 
 interface User {
@@ -23,9 +26,8 @@ export const useAuth = () => {
       const user = userCredential.user
 
       return { user, error: null }
-
-    } catch (err) {
-      console.error('Ошибка при регистрации:', err)
+    } catch (error) {
+      console.error('Ошибка при регистрации:', error)
 
       return {
         user: null,
@@ -36,8 +38,33 @@ export const useAuth = () => {
     }
   }
 
+  const signIn = async (email: string, password: string) => {
+    setLoading(true)
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      )
+      const user = userCredential.user
+
+      return { user, error: null }
+    } catch (err) {
+      console.error('Ошибка при входе:', err)
+
+      return {
+        user: null,
+        error: 'Вход не удался. Попробуйте еще раз.',
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return {
     signUp,
-    loading
+    signIn,
+    loading,
   }
 }

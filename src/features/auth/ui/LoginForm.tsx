@@ -1,16 +1,26 @@
-import { Link } from 'react-router'
+import { Link, useNavigate } from 'react-router'
 import { useForm } from '@mantine/form'
+import { useState } from 'react'
+import { useDisclosure } from '@mantine/hooks'
 import {
   Anchor,
   Button,
   Flex,
   Group,
+  Modal,
   PasswordInput,
+  Text,
   TextInput,
 } from '@mantine/core'
+
 import { routePaths } from '@shared/config/routePaths'
+import { useAuth } from '../model/useAuth'
 
 export const LoginForm = () => {
+  const { loading, signIn } = useAuth()
+  const [modalError, setModalError] = useState<string | null>(null)
+  const [opened, { open, close }] = useDisclosure(false)
+  const navigate = useNavigate()
   const form = useForm({
     mode: 'uncontrolled',
     initialValues: {
@@ -24,44 +34,61 @@ export const LoginForm = () => {
       password: (value) => {
         if (!value) return 'Пароль не может быть пустым'
         if (!/^\d+$/.test(value)) return 'Пароль должен быть из цифр'
-        if (value.length > 5)
-          return 'Пароль слишком длинный (максимум 5 символов)'
-        if (value.length < 3)
-          return 'Пароль слишком короткий (минимум 3 символа)'
+        if (value.length > 8)
+          return 'Пароль слишком длинный (максимум 8 символов)'
+        if (value.length < 6)
+          return 'Пароль слишком короткий (минимум 6 символа)'
       },
     },
   })
 
-  const handleSubmit = (values: typeof form.values) => {
-    console.log(values)
-    form.reset()
+  const handleSubmit = async (values: typeof form.values) => {
+    const { user, error } = await signIn(values.email, values.password)
+
+    if (user && !error) {
+      navigate(routePaths.main, { replace: true })
+    }
+
+    if (error) {
+      setModalError(error)
+      open()
+    }
   }
 
   return (
-    <form onSubmit={form.onSubmit(handleSubmit)}>
-      <Flex direction="column" gap="md">
-        <TextInput
-          autoComplete="email"
-          label="Логин"
-          placeholder="Введите логин"
-          withAsterisk
-          key={form.key('email')}
-          {...form.getInputProps('email')}
-        />
-        <PasswordInput
-          label="Пароль"
-          placeholder="Введите пароль"
-          withAsterisk
-          key={form.key('password')}
-          {...form.getInputProps('password')}
-        />
-      </Flex>
-      <Group justify="flex-end" mt="md" align="end">
-        <Anchor component={Link} to={routePaths.register} size="sm" c="grey">
-          У вас нет аккаунта? Зарегистрируйтесь
-        </Anchor>
-        <Button type="submit">Авторизоваться</Button>
-      </Group>
-    </form>
+    <>
+      <form onSubmit={form.onSubmit(handleSubmit)}>
+        <Flex direction="column" gap="md" miw={380}>
+          <TextInput
+            autoComplete="email"
+            label="Логин"
+            placeholder="Введите логин"
+            withAsterisk
+            key={form.key('email')}
+            {...form.getInputProps('email')}
+          />
+          <PasswordInput
+            label="Пароль"
+            placeholder="Введите пароль"
+            withAsterisk
+            key={form.key('password')}
+            {...form.getInputProps('password')}
+          />
+        </Flex>
+        <Group justify="space-between" mt="md" align="end">
+          <Anchor component={Link} to={routePaths.register} size="sm" c="grey">
+            У вас нет аккаунта? Зарегистрируйтесь
+          </Anchor>
+          <Button type="submit" loading={loading} disabled={loading}>
+            {loading ? 'Загрузка...' : 'Войти'}
+          </Button>
+        </Group>
+      </form>
+      <Modal opened={opened} onClose={close} title="Ошибка">
+        <Text size="sm" c="red">
+          {modalError}
+        </Text>
+      </Modal>
+    </>
   )
 }
