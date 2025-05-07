@@ -47,11 +47,11 @@ export const RegistrationForm = () => {
   })
 
   const handleSubmit = async (values: typeof form.values) => {
-    const { user, error } = await signUp(values.email, values.password)
-    
-    if (user && !error) {
-      navigate(routePaths.main, { replace: true })
-    }
+    const { error } = await signUp(values.email, values.password,
+      () => {
+        navigate(routePaths.main, { replace: true })
+      }
+    )
 
     if (error) {
       setModalError(error)
