@@ -3,11 +3,9 @@ import { Flex } from '@mantine/core'
 
 export const AuthPage = () => {
   return (
-    <div>
-      <Flex justify="center" align="center">
-        <h1>Авторизация</h1>
-      </Flex>
+    <Flex direction="column" justify="center" align="center" h="100vh">
+      <h1>Авторизация</h1>
       <LoginForm />
-    </div>
+    </Flex>
   )
 }
