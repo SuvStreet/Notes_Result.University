@@ -10,6 +10,7 @@ export default defineConfig({
       '@pages': '/src/pages',
       '@shared': '/src/shared',
       '@features': '/src/features',
+      '@widgets': '/src/widgets',
     },
   },
   server: {
