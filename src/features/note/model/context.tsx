@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from 'react'
+import { nanoid } from 'nanoid'
 
 import type { Note, NoteContextProps } from '@entities/note/model/types'
 // import { useAuthContext } from '@app/provider'
@@ -19,7 +20,7 @@ export const NoteProvider = ({ children }: { children: React.ReactNode }) => {
   const [activeNoteId, setActiveNoteId] = useState<string | null>(null)
 
   const addEmptyNote = () => {
-    const id = Date.now().toString()
+    const id = nanoid()
     const newNote = { id, title: '', content: '' }
     setNotes((prev) => [newNote, ...prev])
     setActiveNoteId(id)
