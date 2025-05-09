@@ -11,6 +11,7 @@ export default defineConfig({
       '@shared': '/src/shared',
       '@features': '/src/features',
       '@widgets': '/src/widgets',
+      '@entities': '/src/entities',
       '@tabler/icons-react': '@tabler/icons-react/dist/esm/icons/index.mjs',
     },
   },
