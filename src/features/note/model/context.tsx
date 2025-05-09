@@ -1,7 +1,7 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 
-import type { Note, NoteContextProps } from './types'
-import { useAuthContext } from '@app/provider'
+import type { Note, NoteContextProps } from '@entities/note/model/types'
+// import { useAuthContext } from '@app/provider'
 
 const NoteContext = createContext<NoteContextProps | null>(null)
 
@@ -14,7 +14,7 @@ export const useNoteContext = () => {
 }
 
 export const NoteProvider = ({ children }: { children: React.ReactNode }) => {
-  const { user } = useAuthContext()
+  // const { user } = useAuthContext()
   const [notes, setNotes] = useState<Note[]>([])
   const [activeNoteId, setActiveNoteId] = useState<string | null>(null)
 
