@@ -1,4 +1,5 @@
 import { MantineStyleProvider, RouterProvider, AuthProvider } from './provider'
+import { NoteProvider } from '../entities/note/model/context'
 
 import { Routing } from './routing/Routing'
 
@@ -9,7 +10,9 @@ function App() {
     <MantineStyleProvider>
       <RouterProvider>
         <AuthProvider>
-          <Routing />
+          <NoteProvider>
+            <Routing />
+          </NoteProvider>
         </AuthProvider>
       </RouterProvider>
     </MantineStyleProvider>
