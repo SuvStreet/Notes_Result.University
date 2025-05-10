@@ -1,22 +1,32 @@
 import { useEffect, useRef } from 'react'
 import { Stack, Text, Textarea, TextInput } from '@mantine/core'
 
-import { useNoteContext } from '@features/note/model/context'
+import { useNoteContext } from '@features/note/model/NoteContext'
 
 export const NoteEditor = () => {
-  const { notes, activeNoteId, updateNoteDraft } = useNoteContext()
-  const activeNote = notes.find((note) => note.id === activeNoteId)
+  const { noteDraft, updateNoteDraft } = useNoteContext()
+
   const titleRef = useRef<HTMLInputElement>(null)
+  const justCreated = useRef(false)
 
   useEffect(() => {
-    if (activeNote?.title === '') {
-      titleRef.current?.focus()
+    if (noteDraft && noteDraft.title === '' && noteDraft.content === '') {
+      justCreated.current = true
+    } else {
+      justCreated.current = false
     }
-  }, [activeNoteId])
+  }, [noteDraft])
 
-  if (!activeNote) {
+  useEffect(() => {
+    if (justCreated.current) {
+      titleRef.current?.focus()
+      justCreated.current = false
+    }
+  }, [noteDraft])
+
+  if (!noteDraft) {
     return (
-      <Stack align="center" justify="center" h="100vh" flex={1}>
+      <Stack align="center" justify="center" flex={1}>
         <Text size="xl" fw={500} c="dimmed">
           Выберите заметку или создайте новую.
         </Text>
@@ -25,23 +35,19 @@ export const NoteEditor = () => {
   }
 
   return (
-    <Stack gap={10} p="md" w="100%" h="100vh">
+    <Stack gap={10} w="100%">
       <TextInput
         ref={titleRef}
         placeholder="Заголовок"
-        value={activeNote.title}
-        onChange={(e) =>
-          updateNoteDraft(activeNote.id, { title: e.target.value })
-        }
+        value={noteDraft.title}
+        onChange={(e) => updateNoteDraft({ title: e.currentTarget.value })}
       />
       <Textarea
         placeholder="Текст заметки"
         minRows={15}
-        value={activeNote.content}
+        value={noteDraft.content}
         autosize
-        onChange={(e) =>
-          updateNoteDraft(activeNote.id, { content: e.target.value })
-        }
+        onChange={(e) => updateNoteDraft({ content: e.currentTarget.value })}
       />
     </Stack>
   )

@@ -2,8 +2,8 @@ import { Button, Flex } from '@mantine/core'
 
 import { useAuthContext } from '@app/provider'
 
-import { NoteEditor } from '@widgets/note-editor'
-import { NoteList } from '@widgets/note-list'
+import { NoteEditorPanel } from '@widgets/note-editor-panel/ui'
+import { NoteListPanel } from '@widgets/note-list-panel/ui'
 
 export const Main = () => {
   const { signOut } = useAuthContext()
@@ -12,9 +12,9 @@ export const Main = () => {
     <>
       <Button onClick={signOut}>Выход</Button>
 
-      <Flex align="center" justify="space-between" h="100vh">
-        <NoteList />
-        <NoteEditor />
+      <Flex align="center" justify="space-between">
+        <NoteListPanel />
+        <NoteEditorPanel />
       </Flex>
     </>
   )

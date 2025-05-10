@@ -1,5 +1,5 @@
 import { MantineStyleProvider, RouterProvider, AuthProvider } from './provider'
-import { NoteProvider } from '@features/note/model/context'
+import { NoteProvider } from '@features/note/model/NoteContext'
 
 import { Routing } from './routing/Routing'
 

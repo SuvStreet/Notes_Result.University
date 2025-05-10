@@ -1,25 +1,17 @@
-import { Box, Button, Group, Stack, Text } from '@mantine/core'
+import { Box, Stack, Text } from '@mantine/core'
 
-import { useNoteContext } from '@features/note/model/context'
-import { IconPlus } from '@tabler/icons-react'
+import { useNoteContext } from '@features/note/model/NoteContext'
 
 export const NoteList = () => {
-  const { notes, activeNoteId, setActiveNoteId, addEmptyNote } =
+  const { notes, activeNoteId, setActiveNoteSafely } =
     useNoteContext()
 
   const isEmpty = notes.length === 0
 
   return (
-    <Stack miw={300} maw={300} h="100vh" p="md">
-      <Group justify="space-between" mb="sm">
-        <Text fw={500}>Мои заметки</Text>
-        <Button variant="subtle" size="xs" onClick={addEmptyNote}>
-          <IconPlus size={16} />
-        </Button>
-      </Group>
-
+    <Stack h="100dvh" pl="xs" pr="xs">
       {isEmpty ? (
-        <Stack align="center" h="100%">
+        <Stack align="center" justify="center">
           <Text size="xl" fw={500} c="dimmed">
             Создайте новую заметку.
           </Text>
@@ -31,7 +23,7 @@ export const NoteList = () => {
               key={note.id}
               p="xs"
               bg={note.id === activeNoteId ? 'gray' : ''}
-              onClick={() => setActiveNoteId(note.id)}
+              onClick={() => setActiveNoteSafely(note.id)}
               style={{
                 cursor: 'pointer',
                 borderRadius: 8,
