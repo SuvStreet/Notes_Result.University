@@ -2,12 +2,16 @@ export interface Note {
   id: string
   title: string
   content: string
+  createdAt: number
 }
 
 export interface NoteContextProps {
   notes: Note[]
+  noteDraft: Note | null
   activeNoteId: string | null
   addEmptyNote: () => void
-  setActiveNoteId: (id: string) => void
-  updateNoteDraft: (id: string, fields: Partial<Note>) => void
+  setActiveNoteSafely: (id: string) => void
+  updateNoteDraft: (fields: Partial<Note>) => void
+  saving: boolean
+  isLoadingNotes: boolean
 }
