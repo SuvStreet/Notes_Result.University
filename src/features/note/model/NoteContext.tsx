@@ -84,9 +84,12 @@ export const NoteProvider = ({ children }: { children: React.ReactNode }) => {
   const deleteNote = (id: string) => {
     if (!user) return
 
-    console.log('deleteNote :>> ', id)
+    removeNoteFromFirebase(user.id, id)
 
-    // removeNoteFromFirebase(user.id, id)
+    if (activeNoteId === id) {
+      setActiveNoteId(null)
+      setNoteDraft(null)
+    }
   }
 
   useEffect(() => {

@@ -2,14 +2,17 @@ import { Button, Flex, Group, Modal, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 
 import { useNoteContext } from '@features/note/model/NoteContext'
+import { useParams } from 'react-router'
 
 export const HeaderEditor = () => {
   const { deleteNote } = useNoteContext()
   const [opened, { open, close }] = useDisclosure(false)
+  const { id: noteId } = useParams()
 
   const handleDelete = () => {
     close()
-    deleteNote('1')
+    if (!noteId) return
+    deleteNote(noteId)
   }
 
   return (
