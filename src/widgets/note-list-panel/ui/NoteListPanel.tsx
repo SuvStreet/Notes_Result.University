@@ -6,11 +6,10 @@ import { NoteList } from '@widgets/note-list/ui'
 
 export const NoteListPanel = () => {
   const { isLoadingNotes, addEmptyNote } = useNoteContext()
-  console.log('isLoadingNotes :>> ', isLoadingNotes)
 
   return (
-      <Stack p="md" miw={300} maw={300} h="100vh">
-        <Group justify="space-between">
+      <Stack p="md" miw={300} maw={300} h="100vh" bg="#222222">
+        <Group justify="space-between" >
           <Text fw={500}>Мои заметки</Text>
           <Button variant="subtle" size="xs" onClick={addEmptyNote}>
             <IconPlus size={16} />
