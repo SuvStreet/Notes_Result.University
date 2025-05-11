@@ -2,6 +2,7 @@ import { Box, Button, Input, Mark, Modal, Stack, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { IconSearch } from '@tabler/icons-react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router'
 
 import { useNoteContext } from '@features/note/model/NoteContext'
 
@@ -9,6 +10,7 @@ export const SearchNotes = () => {
   const { notes, setActiveNoteSafely } = useNoteContext()
   const [opened, { open, close }] = useDisclosure(false)
   const [query, setQuery] = useState('')
+  const navigate = useNavigate()
 
   const filteredNotes = notes.filter(
     (note) =>
@@ -54,6 +56,7 @@ export const SearchNotes = () => {
                 setActiveNoteSafely(note.id)
                 close()
                 setQuery('')
+                navigate(`/${note.id}`)
               }}
             >
               <Text fw={500}>

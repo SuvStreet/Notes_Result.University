@@ -7,6 +7,7 @@ import {
 } from 'react'
 import { nanoid } from 'nanoid'
 import { useDebouncedValue } from '@mantine/hooks'
+import { useNavigate } from 'react-router'
 
 import type { Note, NoteContextProps } from '@entities/note/model/types'
 import { subscribeToNotes } from '../api/subscribeToNotes'
@@ -26,6 +27,7 @@ export const useNoteContext = () => {
 
 export const NoteProvider = ({ children }: { children: React.ReactNode }) => {
   const [saving, setSaving] = useState(false)
+  const navigate = useNavigate()
   const { user } = useAuthContext()
   const [notes, setNotes] = useState<Note[]>([])
   const [activeNoteId, setActiveNoteId] = useState<string | null>(null)
@@ -43,6 +45,7 @@ export const NoteProvider = ({ children }: { children: React.ReactNode }) => {
     setNotes((prev) => [newNote, ...prev])
     setActiveNoteId(id)
     setNoteDraft(newNote)
+    navigate('./' + id)
 
     if (user) {
       saveNoteToFirebase(user.id, newNote)
