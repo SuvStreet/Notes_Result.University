@@ -33,6 +33,14 @@ export const Routing = () => {
           </PrivateRoute>
         }
       />
+      <Route
+        path={routePaths.note}
+        element={
+          <PrivateRoute>
+            <Main />
+          </PrivateRoute>
+        }
+      />
     </Routes>
   )
 }

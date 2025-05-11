@@ -1,10 +1,11 @@
 import { Box, Stack, Text } from '@mantine/core'
+import { useNavigate } from 'react-router'
 
 import { useNoteContext } from '@features/note/model/NoteContext'
 
 export const NoteList = () => {
-  const { notes, activeNoteId, setActiveNoteSafely } =
-    useNoteContext()
+  const { notes, activeNoteId, setActiveNoteSafely } = useNoteContext()
+  const navigate = useNavigate()
 
   const isEmpty = notes.length === 0
 
@@ -23,7 +24,10 @@ export const NoteList = () => {
               key={note.id}
               p="xs"
               bg={note.id === activeNoteId ? 'gray' : ''}
-              onClick={() => setActiveNoteSafely(note.id)}
+              onClick={() => {
+                setActiveNoteSafely(note.id)
+                navigate(`/${note.id}`)
+              }}
               style={{
                 cursor: 'pointer',
                 borderRadius: 8,
