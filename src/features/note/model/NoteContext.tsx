@@ -11,6 +11,7 @@ import { useDebouncedValue } from '@mantine/hooks'
 import type { Note, NoteContextProps } from '@entities/note/model/types'
 import { subscribeToNotes } from '../api/subscribeToNotes'
 import { saveNoteToFirebase } from '../api/saveNoteToFirebase'
+import { removeNoteFromFirebase } from '../api/removeNoteFromFirebase'
 import { useAuthContext } from '@app/provider'
 
 const NoteContext = createContext<NoteContextProps | null>(null)
@@ -80,6 +81,14 @@ export const NoteProvider = ({ children }: { children: React.ReactNode }) => {
     setActiveNoteId(newId)
   }
 
+  const deleteNote = (id: string) => {
+    if (!user) return
+
+    console.log('deleteNote :>> ', id)
+
+    // removeNoteFromFirebase(user.id, id)
+  }
+
   useEffect(() => {
     if (!user) return
 
@@ -133,6 +142,7 @@ export const NoteProvider = ({ children }: { children: React.ReactNode }) => {
         updateNoteDraft,
         saving,
         isLoadingNotes,
+        deleteNote,
       }}
     >
       {children}

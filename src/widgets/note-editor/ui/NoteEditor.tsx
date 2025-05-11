@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { Stack, Text, Textarea, TextInput } from '@mantine/core'
 
 import { useNoteContext } from '@features/note/model/NoteContext'
+import { HeaderEditor } from '@widgets/header-editor/ui'
 
 export const NoteEditor = () => {
   const { noteDraft, updateNoteDraft } = useNoteContext()
@@ -36,6 +37,7 @@ export const NoteEditor = () => {
 
   return (
     <Stack gap={10} w="100%">
+      <HeaderEditor />
       <TextInput
         ref={titleRef}
         placeholder="Заголовок"

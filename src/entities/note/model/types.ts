@@ -14,4 +14,5 @@ export interface NoteContextProps {
   updateNoteDraft: (fields: Partial<Note>) => void
   saving: boolean
   isLoadingNotes: boolean
+  deleteNote: (id: string) => void
 }
