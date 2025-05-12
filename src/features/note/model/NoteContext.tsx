@@ -149,6 +149,8 @@ export const NoteProvider = ({ children }: { children: React.ReactNode }) => {
         saving,
         isLoadingNotes,
         deleteNote,
+        setNoteDraft,
+        setActiveNoteId,
       }}
     >
       {children}

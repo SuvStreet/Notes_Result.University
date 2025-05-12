@@ -67,7 +67,7 @@ export const NoteEditor = () => {
       />
 
       {editor && (
-        <RichTextEditor editor={editor}>
+        <RichTextEditor editor={editor} style={{ wordBreak: 'break-word' }}>
           <RichTextEditor.Toolbar stickyOffset={60}>
             <RichTextEditor.ControlsGroup>
               <RichTextEditor.Bold />
