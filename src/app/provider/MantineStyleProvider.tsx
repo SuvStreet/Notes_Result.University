@@ -3,6 +3,7 @@ import type { ReactNode } from 'react'
 import { MantineProvider } from '@mantine/core'
 
 import '@mantine/core/styles.css'
+import '@mantine/tiptap/styles.css'
 
 interface Props {
   children: ReactNode

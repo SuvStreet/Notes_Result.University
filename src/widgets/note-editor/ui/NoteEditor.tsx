@@ -1,14 +1,29 @@
 import { useEffect, useRef } from 'react'
-import { Stack, Text, Textarea, TextInput } from '@mantine/core'
+import { Stack, Text, TextInput } from '@mantine/core'
+import { useEditor } from '@tiptap/react'
+import StarterKit from '@tiptap/starter-kit'
+import Placeholder from '@tiptap/extension-placeholder';
 
 import { useNoteContext } from '@features/note/model/NoteContext'
 import { HeaderEditor } from '@widgets/header-editor/ui'
+import { RichTextEditor } from '@mantine/tiptap'
 
 export const NoteEditor = () => {
   const { noteDraft, updateNoteDraft } = useNoteContext()
 
   const titleRef = useRef<HTMLInputElement>(null)
   const justCreated = useRef(false)
+
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Placeholder.configure({ placeholder: 'Введите текст' }),
+    ],
+    content: noteDraft?.content || '',
+    onUpdate: ({ editor }) => {
+      updateNoteDraft({ content: editor.getHTML() })
+    },
+  })
 
   useEffect(() => {
     if (noteDraft && noteDraft.title === '' && noteDraft.content === '') {
@@ -24,6 +39,12 @@ export const NoteEditor = () => {
       justCreated.current = false
     }
   }, [noteDraft])
+
+  useEffect(() => {
+    if (editor && noteDraft) {
+      editor.commands.setContent(noteDraft.content)
+    }
+  }, [noteDraft?.id])
 
   if (!noteDraft) {
     return (
@@ -44,13 +65,41 @@ export const NoteEditor = () => {
         value={noteDraft.title}
         onChange={(e) => updateNoteDraft({ title: e.currentTarget.value })}
       />
-      <Textarea
-        placeholder="Текст заметки"
-        minRows={15}
-        value={noteDraft.content}
-        autosize
-        onChange={(e) => updateNoteDraft({ content: e.currentTarget.value })}
-      />
+
+      {editor && (
+        <RichTextEditor editor={editor}>
+          <RichTextEditor.Toolbar stickyOffset={60}>
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Bold />
+              <RichTextEditor.Italic />
+              <RichTextEditor.Strikethrough />
+              <RichTextEditor.ClearFormatting />
+              <RichTextEditor.Code />
+            </RichTextEditor.ControlsGroup>
+
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.H1 />
+              <RichTextEditor.H2 />
+              <RichTextEditor.H3 />
+              <RichTextEditor.H4 />
+            </RichTextEditor.ControlsGroup>
+
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Blockquote />
+              <RichTextEditor.Hr />
+              <RichTextEditor.BulletList />
+              <RichTextEditor.OrderedList />
+            </RichTextEditor.ControlsGroup>
+
+            <RichTextEditor.ControlsGroup>
+              <RichTextEditor.Undo />
+              <RichTextEditor.Redo />
+            </RichTextEditor.ControlsGroup>
+          </RichTextEditor.Toolbar>
+
+          <RichTextEditor.Content />
+        </RichTextEditor>
+      )}
     </Stack>
   )
 }
