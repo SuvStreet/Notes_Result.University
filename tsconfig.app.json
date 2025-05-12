@@ -32,7 +32,9 @@
       "@features/*": ["features/*"],
       "@widgets/*": ["widgets/*"],
       "@entities/*": ["entities/*"],
-    }
+    },
+
+    "types": ["vite-plugin-pwa/client"]
   },
   "include": ["src"]
 }

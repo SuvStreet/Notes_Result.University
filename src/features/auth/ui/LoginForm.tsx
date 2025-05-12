@@ -15,8 +15,10 @@ import {
 
 import { routePaths } from '@shared/config/routePaths'
 import { useAuthContext } from '@app/provider'
+import { useIsMobile } from '@shared/lib/use-media-query'
 
 export const LoginForm = () => {
+  const isMobile = useIsMobile()
   const { loading, signIn } = useAuthContext()
   const [modalError, setModalError] = useState<string | null>(null)
   const [opened, { open, close }] = useDisclosure(false)
@@ -56,7 +58,7 @@ export const LoginForm = () => {
   return (
     <>
       <form onSubmit={form.onSubmit(handleSubmit)}>
-        <Flex direction="column" gap="md" miw={380}>
+        <Flex direction="column" gap="md" w={isMobile ? '100%' : 380}>
           <TextInput
             autoComplete="email"
             label="Логин"
