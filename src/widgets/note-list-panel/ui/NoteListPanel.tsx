@@ -11,7 +11,7 @@ export const NoteListPanel = () => {
   const isMobile = useIsMobile()
 
   return (
-    <Stack p="md" w={isMobile ? '100%' : 300} h="100vh" bg="#222222">
+    <Stack p="md" w={isMobile ? '100%' : 450} h="100vh" bg="#222222">
       <Group justify="space-between">
         <Text fw={500}>Мои заметки</Text>
 
