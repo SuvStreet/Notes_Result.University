@@ -4,12 +4,14 @@ import { IconPlus } from '@tabler/icons-react'
 
 import { NoteList } from '@widgets/note-list/ui'
 import { SearchNotes } from '@widgets/search-notes/ui'
+import { useIsMobile } from '@shared/lib/use-media-query'
 
 export const NoteListPanel = () => {
   const { isLoadingNotes, addEmptyNote } = useNoteContext()
+  const isMobile = useIsMobile()
 
   return (
-    <Stack p="md" miw={300} maw={300} h="100vh" bg="#222222">
+    <Stack p="md" w={isMobile ? '100%' : 300} h="100vh" bg="#222222">
       <Group justify="space-between">
         <Text fw={500}>Мои заметки</Text>
 

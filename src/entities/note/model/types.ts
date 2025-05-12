@@ -15,4 +15,6 @@ export interface NoteContextProps {
   saving: boolean
   isLoadingNotes: boolean
   deleteNote: (id: string) => void
+  setNoteDraft: React.Dispatch<React.SetStateAction<Note | null>>
+  setActiveNoteId: React.Dispatch<React.SetStateAction<string | null>>
 }
