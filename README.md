@@ -27,7 +27,7 @@
 
 ## 🔗 Веб-приложение
 
-[https://notes-result-university-middle.web.app/auth](https://notes-result-university-middle.web.app/auth)
+[https://notes-result-university-middle.web.app](https://notes-result-university-middle.web.app)
 
 ## 🖼️ Скриншоты
 
